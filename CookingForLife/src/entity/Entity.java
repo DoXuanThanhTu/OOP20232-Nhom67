@@ -28,12 +28,12 @@ public abstract class Entity {
 	}
 	public void draw (Graphics2D g2) {
 		switch(type) {
-		case 0 ://vẽ object
+		case 0 :
 			g2.drawImage(image, screenX, screenY,widthObject, heightObject, null);
 			g2.setColor(Color.white);
 			g2.drawString(name, screenX, screenY);
 			g2.drawRect(screenX + hitBox[0], screenY + hitBox[1], hitBox[2], hitBox[3]);
-		case 1 ://vẽ entity
+		case 1 :
 			g2.drawImage(image, screenX, screenY,hitBox[2], hitBox[3], null);
 		}
 		

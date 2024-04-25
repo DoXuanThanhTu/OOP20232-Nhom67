@@ -11,7 +11,7 @@ public class CollsionCheck {
 	public CollsionCheck(GamePanel gp){
 		this.gp = gp;
 	}
-	public void checkTile(Entity entity) {
+	public boolean checkinAScreen(Entity entity) {
 		this.entity = entity;
 		boolean inAScreen = true;
 		int screenY = entity.screenY;
@@ -26,44 +26,32 @@ public class CollsionCheck {
 //		if (entityLeftscreenX  - entity.speed < 0 || 
 //			entityRightscreenX + entity.speed < gp.screenWidth ||
 //			entityTopscreenY  - entity.speed< 0 ||
-//			entityBottomscreenY + entity.speed> gp.screenHeight) {
+//			entityBottomscreenY + entity.speed> gp.screenHeight) 
 //			entity.collisionOn = true;
 //			return entity.collisionOn;
 //		}
-		if (entityLeftscreenX < 0 || entityRightscreenX > gp.screenWidth || entityTopscreenY < 0 || entityBottomscreenY > gp.screenHeight) {
+		if (entityLeftscreenX < 1 || entityRightscreenX > gp.screenWidth || entityTopscreenY < 1 || entityBottomscreenY > gp.screenHeight) {
 			inAScreen = false;
 		}
-		String tem1 = "";
-		if (inAScreen == false) {
-			entity.collisionOn = true;
+//		String tem1 = "";
 			
-			switch(temp) {
-			case "up":
-				if(tem1 == "down") entity.collisionOn = false;
-				screenY -= speed;
-				locationHitBox[1] = screenY + gp.tileSize * 2 + 32;
-				break;
-			case "down":
-				if(tem1 == "up") entity.collisionOn = false;
-				screenY += speed;
-				locationHitBox[1] =screenY + gp.tileSize * 2 + 32;
-				break;
-			case "left":
-				if(tem1 == "right") entity.collisionOn = false;
-				screenX -= speed;
-				locationHitBox[0] = screenX + gp.tileSize / 2 + 8;
-				break;
-			case "right":
-				if(tem1 == "left") entity.collisionOn = false;
-				screenX += speed;
-				locationHitBox[0] = screenX + gp.tileSize / 2 + 8;
-				break;
-			default :
-				break;
-			}
-			tem1 = entity.direction;
+			
 
-		}else {
+		
+		return inAScreen;
+	}
+	public void checkTile(Entity entity) {
+		this.entity = entity;
+		if (gp.collsionCheck.checkinAScreen(entity) == true) {
+		int screenY = entity.screenY;
+		int screenX = entity.screenX;
+		int[] locationHitBox = entity.locationHitBox;
+		int speed = entity.speed;
+		String temp = entity.direction;
+		int entityLeftscreenX =  entity.locationHitBox[0];
+		int entityRightscreenX = entity.locationHitBox[0] + entity.locationHitBox[2];
+		int entityTopscreenY =  entity.locationHitBox[1];
+		int entityBottomscreenY = entity.locationHitBox[1] + entity.locationHitBox[3];
 		int entityLeftCol = (entity.locationHitBox[0])/gp.tileSize;
 		int entityRightCol = (entity.locationHitBox[0] + entity.locationHitBox[2])/gp.tileSize;
 		int entityTopRow = (entity.locationHitBox[1])/gp.tileSize;
@@ -104,6 +92,7 @@ public class CollsionCheck {
 			break;
 		}
 		}
+		
 	}
 	public int checkObject(Entity entity, boolean isPlayer) {
 		int index = 9999;

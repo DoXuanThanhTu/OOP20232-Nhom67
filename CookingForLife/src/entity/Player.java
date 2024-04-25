@@ -24,7 +24,7 @@ public class Player extends Entity{
 	String PlayerSpriteRunning = "Running.png";
 	BufferedImage[] animationIdle, animationWalking,animationRunning;
 	int animationTick = 0;
-	int animationSpeed = 4;
+	int animationSpeed = 8;
 	int animationIndex = 0;
 	int upIdleIndex = 0;
 	int leftIdleIndex = 4;
@@ -40,6 +40,8 @@ public class Player extends Entity{
 	public int playerWidth;
 	public int playerHeight;
 	public double hitBoxScale = 1.5;
+
+	private boolean doublePressed;
 	
 	
 	public Player(GamePanel gp, KeyInput key) {
@@ -63,7 +65,7 @@ public class Player extends Entity{
 		playerAction = "idle";
 		locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
 		locationHitBox[1] = screenY + gp.tileSize * 2;
-		locationHitBox[2] = 24;
+		locationHitBox[2] = 32;
 		locationHitBox[3] = 32;
 	}
 		
@@ -82,23 +84,33 @@ public class Player extends Entity{
 	}
 	public void update() {
 		if(gp.gameState == gp.playState) {
-		setAction(PlayerSpriteIdle);
-		if(key.upPressed == true ) {
+		if ((key.upPressed && key.downPressed) || (key.leftPressed && key.rightPressed))
+			{
+			setAction(PlayerSpriteIdle);
+			doublePressed = true;
+			}
+		else if(key.upPressed && !key.downPressed) {
 			direction = "up";
 			setAction(PlayerSpriteWalking);
+			doublePressed = false;
+			
 		}
-		else if(key.downPressed == true) {
+		else if(key.downPressed && !key.upPressed) {
 			direction = "down";
 			setAction(PlayerSpriteWalking );
+			doublePressed = false;
 		}
-		else if(key.rightPressed == true ) {
+		else if(key.rightPressed && !key.leftPressed ) {
 			direction = "right";
 			setAction(PlayerSpriteWalking );
+			doublePressed = false;
 		}
-		else if(key.leftPressed == true ) {
+		else if(key.leftPressed && !key.rightPressed) {
 			direction = "left";
 			setAction(PlayerSpriteWalking);
+			doublePressed = false;
 		}
+		else setAction(PlayerSpriteIdle);
 //		}
 		collisionOn = false;
 		gp.collsionCheck.checkTile(this);
@@ -107,38 +119,73 @@ public class Player extends Entity{
 		
 		int npcIndex = gp.collsionCheck.checkEntity(gp.player, gp.customers);
 		interact(npcIndex);
-			if (collisionOn == false && (key.upPressed || key.downPressed || key.leftPressed || key.rightPressed)) {
+//		if (key.upPressed && key.downPressed && key.leftPressed && key.rightPressed) setAction(PlayerSpriteIdle);
+			if (collisionOn == false && (key.upPressed || key.downPressed || key.leftPressed || key.rightPressed) && doublePressed == false) {
 				switch(direction) {
 				case "up":
 					screenY -= speed;
-					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
+//					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
 					locationHitBox[1] = screenY + gp.tileSize * 2;
-					locationHitBox[2] = 24;
-					locationHitBox[3] = 32;
+//					locationHitBox[2] = 24;
+//					locationHitBox[3] = 32;
 					break;
 				case "down":
 					screenY += speed;
-					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
+//					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
 					locationHitBox[1] = screenY + gp.tileSize * 2;
-					locationHitBox[2] = 24;
-					locationHitBox[3] = 32;
+//					locationHitBox[2] = 24;
+//					locationHitBox[3] = 32;
 					break;
 				case "left":
 					screenX -= speed;
 					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
-					locationHitBox[1] = screenY + gp.tileSize * 2 + 16;
-					locationHitBox[2] = 40;
-					locationHitBox[3] = 16;
+//					locationHitBox[1] = screenY + gp.tileSize * 2 + 16;
+//					locationHitBox[2] = 40;
+//					locationHitBox[3] = 16;
 					break;
 				case "right":
 					screenX += speed;
 					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
-					locationHitBox[1] = screenY + gp.tileSize * 2 + 16;
-					locationHitBox[2] = 40;
-					locationHitBox[3] = 16;
+//					locationHitBox[1] = screenY + gp.tileSize * 2 + 16;
+//					locationHitBox[2] = 40;
+//					locationHitBox[3] = 16;
 					break;
 				}
 			}
+//			if(!gp.collsionCheck.checkinAScreen(this)) {
+//				collisionOn = true;
+//				switch(direction) {
+//				case "up":
+//					screenY -= speed;
+////					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
+//					locationHitBox[1] = screenY + gp.tileSize * 2;
+////					locationHitBox[2] = 24;
+////					locationHitBox[3] = 32;
+//
+//					break;
+//				case "down":
+//					screenY += speed;
+////					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
+//					locationHitBox[1] = screenY + gp.tileSize * 2;
+////					locationHitBox[2] = 24;
+////					locationHitBox[3] = 32;
+//					break;
+//				case "left":
+//					screenX -= speed;
+//					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
+////					locationHitBox[1] = screenY + gp.tileSize * 2 + 16;
+////					locationHitBox[2] = 40;
+////					locationHitBox[3] = 16;
+//					break;
+//				case "right":
+//					screenX += speed;
+//					locationHitBox[0] = screenX + gp.tileSize + 16 + 4;
+////					locationHitBox[1] = screenY + gp.tileSize * 2 + 16;
+////					locationHitBox[2] = 40;
+////					locationHitBox[3] = 16;
+//					break;
+//				}
+//			}
 		}else if(gp.gameState == gp.pauseState){
 		}
 			
@@ -246,7 +293,7 @@ public class Player extends Entity{
 		if (animationTick >= animationSpeed) {
 			animationTick = 0;
 			animationIndex++;
-			if (animationIndex >= getAmount(playerAction) - 1 ) {
+			if (animationIndex >= getAmount(playerAction) ) {
 				animationIndex = 0;
 			}
 		}

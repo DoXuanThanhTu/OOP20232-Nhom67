@@ -43,7 +43,6 @@ public class Customer extends Entity {
 	public boolean checkedOrder = false;
 	public Set<String> keys;
 	public final static int CUSTOMER_MAX = 3;
-	//orders gom ten mon an va gia tien
 	private LinkedHashMap<String, Float> orders; 
 	public float bill = 0;
 	public int done = 0;
